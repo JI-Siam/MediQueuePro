@@ -1,0 +1,54 @@
+@model List<AppointmentDTO>
+@{
+    ViewData["Title"] = "Live Queue";
+    var currentAppointment = ViewBag.CurrentAppointment as AppointmentDTO;
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge bg-danger bg-gradient mb-3">Queue</span>
+            <h2 class="fw-bold mb-2">Your token: @currentAppointment?.QueueToken</h2>
+            <p class="text-muted mb-0">Live queue for Dr. @(currentAppointment?.DoctorName ?? "")</p>
+        </div>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-light border">No queue found.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Token</th>
+                        <th>Patient</th>
+                        <th>Time</th>
+                        <th>Estimated</th>
+                        <th>Emergency</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var appointment = Model[i];
+                        var estimatedMinutes = i * 5;
+                        if (appointment.Status == "Completed") estimatedMinutes = 0;
+                        <tr
+                            class="@(currentAppointment != null && appointment.AppointmentId == currentAppointment.AppointmentId ? "table-danger" : "")">
+                            <td>@appointment.QueueToken</td>
+                            <td>@appointment.PatientName</td>
+                            <td>@appointment.AppointmentTime.ToString("HH:mm:ss")</td>
+                            <td>@estimatedMinutes min</td>
+                            <td>@(appointment.IsEmergency ? "Yes" : "No")</td>
+                            <td>@appointment.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

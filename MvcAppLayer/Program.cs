@@ -22,9 +22,13 @@ builder.Services.AddDbContext<MediQueueProDbContext>(opt =>
 
 builder.Services.AddScoped<PatientRepo>();
 builder.Services.AddScoped<DoctorRepo>();
+builder.Services.AddScoped<SpecializationRepo>();
 builder.Services.AddScoped<AppointMentRepo>();
 builder.Services.AddScoped<AdminRepo>();
 builder.Services.AddScoped<PatientService>();
+builder.Services.AddScoped<DoctorService>();
+builder.Services.AddScoped<AppointMentService>();
+builder.Services.AddScoped<AdminService>();
 
 
 var app = builder.Build();

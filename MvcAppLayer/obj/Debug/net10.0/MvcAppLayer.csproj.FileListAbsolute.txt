@@ -152,7 +152,6 @@
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/scopedcss/bundle/MvcAppLayer.styles.css
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/scopedcss/projectbundle/MvcAppLayer.bundle.scp.css
-/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/xjyxmxywpk-{0}-lugek5hnai-lugek5hnai.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/5r44xiozhk-{0}-61n19gt1b8-61n19gt1b8.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/z0x8uj9q2e-{0}-fr7q2aak1r-fr7q2aak1r.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/vxek82k5o1-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -229,3 +228,4 @@
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/ref/MvcAppLayer.dll
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/MvcAppLayer.MvcApplicationPartsAssemblyInfo.cs
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/bin/Debug/net10.0/AutoMapper.dll
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/xjyxmxywpk-{0}-3phu357z36-3phu357z36.gz

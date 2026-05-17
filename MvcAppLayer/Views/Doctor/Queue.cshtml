@@ -1,0 +1,86 @@
+@model List<AppointmentDTO>
+@{
+    ViewData["Title"] = "Doctor Queue";
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge bg-danger bg-gradient mb-3">Queue</span>
+            <h2 class="fw-bold mb-2">Live Queue</h2>
+            <p class="text-muted mb-0">Doctor ID: @ViewBag.DoctorId</p>
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-light border">No queue found.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Token</th>
+                        <th>Patient</th>
+                        <th>Time</th>
+                        <th>Estimated</th>
+                        <th>Emergency</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        var appointment = Model[i];
+                        var estimatedMinutes = i * 5;
+                        if (appointment.Status == "Completed") estimatedMinutes = 0;
+                        <tr>
+                            <td>@appointment.QueueToken</td>
+                            <td>@appointment.PatientName</td>
+                            <td>@appointment.AppointmentTime.ToString("HH:mm:ss")</td>
+                            <td>@estimatedMinutes min</td>
+                            <td>@(appointment.IsEmergency ? "Yes" : "No")</td>
+                            <td>@appointment.Status</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    @if (!string.Equals(appointment.Status, "Waiting", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                            <input type="hidden" name="status" value="Waiting" />
+                                            <button class="btn btn-sm btn-warning">Mark Waiting</button>
+                                        </form>
+                                    }
+
+                                    @if (!string.Equals(appointment.Status, "Completed", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <form asp-action="UpdateStatus" method="post" class="d-inline ms-1">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="appointmentId" value="@appointment.AppointmentId" />
+                                            <input type="hidden" name="status" value="Completed" />
+                                            <button class="btn btn-sm btn-success">Mark Completed</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

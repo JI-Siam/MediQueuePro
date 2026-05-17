@@ -1,0 +1,96 @@
+@model List<AppointmentDTO>
+@{
+    ViewData["Title"] = "Doctor Queues";
+    var doctors = ViewBag.Doctors as List<DoctorDTO> ?? new List<DoctorDTO>();
+    int? selectedDoctorId = ViewBag.SelectedDoctorId as int?;
+    var currentPatientId = ViewBag.CurrentPatientId as int?;
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-3 flex-wrap">
+        <div>
+            <h2 class="fw-bold mb-1">Doctor Queues</h2>
+            <p class="text-muted mb-0">Select a doctor to view that full queue. Your own entries are highlighted.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="Dashboard">Back</a>
+    </div>
+
+    <form method="get" asp-action="Queues" class="row g-2 align-items-end mb-4">
+        <div class="col-md-5">
+            <label class="form-label">Doctor</label>
+            <select class="form-select" name="doctorId" onchange="this.form.submit()">
+                @foreach (var doctor in doctors)
+                {
+                    if (selectedDoctorId == doctor.DoctorId)
+                    {
+                        <option value="@doctor.DoctorId" selected>@doctor.FullName</option>
+                    }
+                    else
+                    {
+                        <option value="@doctor.DoctorId">@doctor.FullName</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger w-100" type="submit">Show</button>
+        </div>
+    </form>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="alert alert-light border mb-0">No queue found for the selected doctor.</div>
+    }
+    else
+    {
+        var orderedQueue = Model;
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Estimated</th>
+                                <th>Emergency</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < orderedQueue.Count; i++)
+                            {
+                                var appointment = orderedQueue[i];
+                                var estimatedMinutes = i * 5;
+                                if (appointment.Status == "Completed") estimatedMinutes = 0;
+
+                                var isCurrentPatient = currentPatientId.HasValue && appointment.PatientId ==
+                                                        currentPatientId.Value;
+                                <tr class="@(isCurrentPatient ? "table-danger" : "")">
+                                    <td>@appointment.QueueToken</td>
+                                    <td>@appointment.PatientName</td>
+                                    <td>@appointment.AppointmentDate</td>
+                                    <td>@appointment.AppointmentTime.ToString("HH:mm:ss")</td>
+                                    <td>@estimatedMinutes min</td>
+                                    <td>@(appointment.IsEmergency ? "Yes" : "No")</td>
+                                    <td class="@(appointment.Status == "Completed" ? "text-success" : "")">@appointment.Status
+                                    </td>
+                                    <td>
+                                        @if (isCurrentPatient)
+                                        {
+                                            <a class="btn btn-sm btn-outline-danger" asp-action="AppointmentDetails"
+                                               asp-route-id="@appointment.AppointmentId">Details</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -8,8 +8,15 @@ public class AdminController : Controller
     {
         this.srvc = srvc;
     }
+    [AdminAccess]
     public IActionResult Index()
     {
         return View();
+    }
+
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction("Index", "Home");
     }
 }

@@ -1,0 +1,29 @@
+@model AppointmentDTO
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge bg-danger bg-gradient mb-3">Appointment Details</span>
+            <h2 class="fw-bold mb-2">Token #@Model.QueueToken</h2>
+            <p class="text-muted mb-4">Patient: @Model.PatientName</p>
+
+            <div class="row g-3">
+                <div class="col-md-6"><strong>Doctor:</strong> @Model.DoctorName</div>
+                <div class="col-md-6"><strong>Patient:</strong> @Model.PatientName</div>
+                <div class="col-md-6"><strong>Date:</strong> @Model.AppointmentDate</div>
+                <div class="col-md-6"><strong>Time:</strong> @Model.AppointmentTime</div>
+                <div class="col-md-6"><strong>Confirmed (UTC):</strong>
+                    @(Model.CreatedAt?.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss") ?? "-") UTC</div>
+                    <div class="col-md-6"><strong>Status:</strong> @Model.Status</div>
+                    <div class="col-md-6"><strong>Emergency:</strong> @(Model.IsEmergency ? "Yes" : "No")</div>
+                </div>
+
+                <div class="mt-4">
+                    <a class="btn btn-outline-secondary" asp-action="Appointments">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>

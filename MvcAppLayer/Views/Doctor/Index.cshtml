@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+    var doctorId = ViewContext.HttpContext.Session.GetInt32("UID");
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge bg-danger bg-gradient mb-3">Doctor Dashboard</span>
+            <h2 class="fw-bold mb-2">Welcome, @ViewBag.Uname</h2>
+            <p class="text-muted mb-4">Your dashboard is ready. Doctor features can be added here.</p>
+
+            <div class="d-flex gap-3 flex-wrap">
+                <a class="btn btn-outline-danger" asp-action="List">Doctor List</a>
+                <a class="btn btn-outline-primary" asp-action="Queue" asp-route-id="@doctorId">Queue</a>
+                <a class="btn btn-outline-secondary" asp-action="Logout">Logout</a>
+            </div>
+        </div>
+                var doctorId = ViewContext.HttpContext.Session.GetInt32("UID");
+</div>

@@ -2,87 +2,80 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>Welcome to MediQueuePro</p>
+@{
+    ViewData["Title"] = "Welcome";
+    var userName = Context.Session.GetString("Uname");
+    var userType = Context.Session.GetInt32("UType");
+
+    var patientTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Login", "Patient") : Url.Action("Dashboard",
+"Patient");
+    var doctorTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Login", "Doctor") : Url.Action("Index", "Doctor");
+    var adminTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Index", "Home") : Url.Action("Index", "Admin");
+}
+
+<style>
+    .hero {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, rgba(255, 99, 132, 0.08) 0%, rgba(255, 99, 132, 0.02) 55%, rgba(255, 255, 255, 0) 100%);
+        padding: 4rem 0;
     }
 
-    <style>
-            .hero {
-                min-height: 80vh;
-                display: flex;
-                align-items: center;
-                background: linear-gradient(135deg, rgba(255, 99, 132, 0.06) 0%, rgba(255, 99, 132, 0.02) 40%, rgba(255, 255, 255, 0) 100%);
-                padding: 4rem 0;
-            }
+    .card-glass {
+        background: rgba(255, 255, 255, 0.88);
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    }
 
-            .card-glass {
-                background: rgba(255, 255, 255, 0.85);
-                border: none;
-                border-radius: 12px;
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            }
+    .role-btn {
+        min-width: 140px;
+    }
+</style>
 
-            .role-btn {
-                min-width: 140px;
-            }
-    </style>
+<main class="hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card card-glass p-4 p-md-5">
+                    <div class="row align-items-center g-4">
+                        <div class="col-md-6 pe-md-5">
+                            <span class="badge bg-danger bg-gradient">MediQueuePro</span>
+                            <h1 class="display-5 fw-bold mt-3">Welcome</h1>
+                            <p class="lead text-muted mb-4">Choose your role to continue into the right workspace.</p>
 
-    <main class="hero">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card card-glass p-4">
-                        <div class="row align-items-center">
-                            <div class="col-md-6 pe-md-5">
-                                <span class="badge bg-danger bg-gradient">MediQueuePro</span>
-                                <h1 class="display-5 fw-bold mt-3">Welcome</h1>
-                                <p class="lead text-muted">Select your role to get started. You will be routed to the
-                                    patient portal for the demo.</p>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <a class="btn btn-outline-danger role-btn" href="@adminTarget">Admin</a>
+                                <a class="btn btn-outline-danger role-btn" href="@doctorTarget">Doctor</a>
+                                <a class="btn btn-danger role-btn" href="@patientTarget">Patient</a>
+                            </div>
 
-                                    <div class="d-flex gap-3 mt-4 flex-wrap">
-                                        <button class="btn btn-outline-danger role-btn"
-                                                onclick="selectRole('Admin')">Admin</button>
-                                        <button class="btn btn-outline-danger role-btn"
-                                                onclick="selectRole('Doctor')">Doctor</button>
-                                        <button class="btn btn-danger role-btn"
-                                                onclick="selectRole('Patient')">Patient</button>
-                                    </div>
+                            @if (!string.IsNullOrWhiteSpace(userName))
+                            {
+                                <p class="text-muted small mt-3 mb-0">Signed in as @userName</p>
+                            }
+                        </div>
 
-                                    <p class="text-muted small mt-3">Prefer direct access? <a asp-controller="Patient"
-                                                                                                  asp-action="Index">Go to Patient Portal</a></p>
-                                    </div>
-
-                                    <div class="col-md-6 d-flex align-items-center justify-content-center">
-                                        <div class="text-center p-4">
-                                            <div class="mb-3">
-                                                <svg width="140" height="140" viewBox="0 0 24 24" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg" class="mb-3">
-                                                    <rect width="24" height="24" rx="4" fill="#FFECEF" />
-                                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
-                                                          fill="#FF5A6E" />
-                                                    <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4v1H4v-1z" fill="#FF99A8" />
-                                                </svg>
-                                            </div>
-                                            <h5 class="mb-2">Friendly demo</h5>
-                                            <p class="text-muted mb-0">Role selection navigates to the patient portal for this
-                                                demo.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="text-center p-4">
+                                <svg width="160" height="160" viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg" class="mb-3">
+                                    <rect width="24" height="24" rx="5" fill="#FFECEF" />
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
+                                          fill="#FF5A6E" />
+                                    <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4v1H4v-1z" fill="#FF99A8" />
+                                </svg>
+                                <h5 class="mb-2">Modern queue flow</h5>
+                                <p class="text-muted mb-0">Book, track, and manage appointments from the same portal.
+                                </p>
                             </div>
                         </div>
                     </div>
-                </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
-                <script>
-                        function selectRole(role) {
-                            try { sessionStorage.setItem('selectedRole', role); } catch (e) { }
-                            let target = '/Patient/Index';
-                            if (role === 'Doctor') target = '/Doctor/Index';
-                            else if (role === 'Admin') target = '/Admin/Index';
-                            window.location.href = target;
-                        }
-                </script>
+

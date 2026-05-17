@@ -1,0 +1,41 @@
+@model List<DoctorDTO>
+@{
+    ViewData["Title"] = "Doctor List";
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h3 class="fw-bold mb-3">Doctors</h3>
+
+            @if (Model == null || Model.Count == 0)
+            {
+                <div class="alert alert-light border mb-0">No doctors available yet.</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Available</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var doctor in Model)
+                            {
+                                <tr>
+                                    <td>@doctor.FullName</td>
+                                    <td>@doctor.Email</td>
+                                    <td>@(doctor.IsAvailable == true ? "Yes" : "No")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

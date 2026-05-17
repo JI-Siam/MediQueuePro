@@ -1,0 +1,129 @@
+@model AppointmentCreateDTO
+@{
+    ViewData["Title"] = "Book Appointment";
+    var doctor = ViewBag.Doctor as DoctorDTO;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4 p-md-5">
+                    <span class="badge bg-danger bg-gradient mb-3">Appointment Form</span>
+                    <h2 class="fw-bold mb-2">Book with @(doctor?.FullName ?? "Doctor")</h2>
+                    <p class="text-muted mb-0">Confirm the appointment. Date is fixed to today, and booking time is
+                        captured automatically in UTC.</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+                        @if (doctor != null)
+                        {
+                            <div class="row g-3 mb-4 small text-muted">
+                                <div class="col-md-6"><strong>Email:</strong> @doctor.Email</div>
+                                <div class="col-md-6"><strong>Phone:</strong> @doctor.Phone</div>
+                                <div class="col-md-6"><strong>Visit Start:</strong> @doctor.VisitingStartTime</div>
+                                <div class="col-md-6"><strong>Visit End:</strong> @doctor.VisitingEndTime</div>
+                            </div>
+                        }
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.Error</div>
+                        }
+
+                        <form asp-action="BookAppointment" method="post" id="appointmentForm">
+                            @Html.AntiForgeryToken()
+                            <input asp-for="DoctorId" type="hidden" />
+                            <input asp-for="AppointmentDate" type="hidden" />
+                            <input asp-for="AppointmentTime" type="hidden" id="AppointmentTime" />
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Appointment Date</label>
+                                    <input type="text" class="form-control"
+                                           value="@Model.AppointmentDate.ToString("yyyy-MM-dd")" readonly />
+                                    <small class="text-muted">This is fixed to today.</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Confirmation Time (UTC)</label>
+                                    <input type="text" class="form-control" id="DisplayUtcTime" readonly />
+                                    <small class="text-muted">Captured when you confirm booking.</small>
+                                </div>
+                                <div class="col-12 form-check mt-2 ms-2">
+                                    <input asp-for="IsEmergency" class="form-check-input" id="IsEmergency" />
+                                    <label class="form-check-label" for="IsEmergency">Emergency appointment</label>
+                                </div>
+                                <div class="col-12 d-grid mt-3">
+                                    <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal"
+                                            data-bs-target="#confirmModal">Review & Confirm</button>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm appointment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-2"><strong>Doctor:</strong> @(doctor?.FullName ?? "Doctor")</p>
+                                            <p class="mb-2"><strong>Date:</strong> <span id="confirmDate"></span></p>
+                                            <p class="mb-2"><strong>Time:</strong> <span id="confirmTime"></span></p>
+                                            <p class="mb-0"><strong>Type:</strong> <span id="confirmEmergency"></span></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Confirm & Book</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            const dateInput = document.getElementById('AppointmentDate');
+            const timeInput = document.getElementById('AppointmentTime');
+            const displayUtcTime = document.getElementById('DisplayUtcTime');
+            const emergencyInput = document.getElementById('IsEmergency');
+            const appointmentDate = '@DateTime.Today.ToString("yyyy-MM-dd")';
+
+            function getUtcHms() {
+                return new Date().toISOString().substring(11, 19);
+            }
+
+            const initialUtcTime = getUtcHms();
+            if (timeInput) {
+                timeInput.value = initialUtcTime;
+            }
+            if (displayUtcTime) {
+                displayUtcTime.value = initialUtcTime + ' UTC';
+            }
+
+            const modal = document.getElementById('confirmModal');
+            modal.addEventListener('show.bs.modal', function () {
+                const utcTime = getUtcHms();
+                if (timeInput) {
+                    timeInput.value = utcTime;
+                }
+                if (displayUtcTime) {
+                    displayUtcTime.value = utcTime + ' UTC';
+                }
+
+                document.getElementById('confirmDate').textContent = appointmentDate;
+                document.getElementById('confirmTime').textContent = (utcTime || '-') + ' UTC';
+                document.getElementById('confirmEmergency').textContent = emergencyInput.checked ? 'Emergency' : 'Regular';
+            });
+        </script>
+    }

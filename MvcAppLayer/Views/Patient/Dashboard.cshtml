@@ -1,6 +1,10 @@
+@model List<DoctorDTO>
 @{
     ViewData["Title"] = "Patient Dashboard";
-    var doctors = ViewBag.Doctors as IEnumerable<string> ?? Enumerable.Empty<string>();
+    var specializations = ViewBag.Specializations as List<DAL.EF.Tables.Specialization> ?? new
+List<DAL.EF.Tables.Specialization>();
+    int? selectedSpecializationId = ViewBag.SelectedSpecializationId as int?;
+    string? selectedStatus = ViewBag.SelectedStatus as string;
 }
 
 <div class="container py-5">
@@ -8,38 +12,90 @@
         <div>
             <span class="badge bg-success mb-2">Logged in</span>
             <h2 class="fw-bold mb-1">Welcome, @ViewBag.Uname</h2>
-            <p class="text-muted mb-0">Your doctor list will appear here.</p>
+            <p class="text-muted mb-0">Explore doctors and book an appointment.</p>
         </div>
+        <a class="btn btn-outline-danger" asp-action="Appointments">My Appointments</a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <form method="get" asp-action="Dashboard" class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h4 class="mb-3">Doctors</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Specialization</label>
+                    <select class="form-select" name="specializationId">
+                        <option value="">All specializations</option>
+                        @foreach (var specialization in specializations)
+                        {
+                            <option value="@specialization.SpecializationId"
+                                    selected="@(selectedSpecializationId == specialization.SpecializationId)">
+                                @specialization.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select class="form-select" name="status">
+                        <option value="">All statuses</option>
+                        <option value="available"
+                                selected="@(string.Equals(selectedStatus, "available", StringComparison.OrdinalIgnoreCase))">
+                            Available</option>
+                            <option value="unavailable"
+                                    selected="@(string.Equals(selectedStatus, "unavailable", StringComparison.OrdinalIgnoreCase))">
+                                Unavailable</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-danger flex-fill">Filter</button>
+                            <a class="btn btn-outline-secondary" asp-action="Dashboard">Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
-            @if (!doctors.Any())
+            @if (Model == null || Model.Count == 0)
             {
                 <div class="alert alert-light border mb-0">No doctors loaded yet.</div>
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var doctor in doctors)
-                            {
-                                <tr>
-                                    <td>@doctor</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="row g-4">
+                    @foreach (var doctor in Model)
+                    {
+                        <div class="col-lg-6">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                        <div>
+                                            <h4 class="fw-bold mb-1">@doctor.FullName</h4>
+                                            <div class="text-muted">@doctor.Email</div>
+                                        </div>
+                                        <span class="badge @(doctor.IsAvailable == true ? "bg-success" : "bg-secondary")">
+                                            @(doctor.IsAvailable == true ? "Available" : "Unavailable")
+                                        </span>
+                                    </div>
+
+                                    <div class="row g-2 small text-muted mb-4">
+                                        <div class="col-6"><strong>Phone:</strong> @doctor.Phone</div>
+                                        <div class="col-6"><strong>Specialization:</strong>
+                                            @(string.IsNullOrWhiteSpace(doctor.SpecializationName) ? "N/A" : doctor.SpecializationName)
+                                        </div>
+                                        <div class="col-6"><strong>Visit Start:</strong> @doctor.VisitingStartTime</div>
+                                        <div class="col-6"><strong>Visit End:</strong> @doctor.VisitingEndTime</div>
+                                        <div class="col-6"><strong>Honorarium:</strong> @doctor.Honorarium</div>
+                                        <div class="col-6"><strong>Experience:</strong> @doctor.ExperienceYears years</div>
+                                    </div>
+
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <a class="btn btn-outline-danger" asp-action="DoctorDetails"
+                                           asp-route-id="@doctor.DoctorId">View Details</a>
+                                        <a class="btn btn-danger" asp-action="BookAppointment"
+                                           asp-route-doctorId="@doctor.DoctorId">Book Appointment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             }
         </div>
-    </div>
-</div>

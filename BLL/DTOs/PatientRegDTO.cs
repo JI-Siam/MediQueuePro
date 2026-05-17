@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 public class PatientRegDTO
 {
     [Required]
+    [MinLength(3)]
     public string FullName { get; set; } = string.Empty;
 
     [Required]

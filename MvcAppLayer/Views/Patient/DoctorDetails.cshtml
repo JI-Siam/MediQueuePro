@@ -1,0 +1,32 @@
+@model DoctorDTO
+@{
+    ViewData["Title"] = "Doctor Details";
+}
+
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+            <span class="badge bg-danger bg-gradient mb-3">Doctor Details</span>
+            <h2 class="fw-bold mb-2">@Model.FullName</h2>
+            <p class="text-muted mb-4">@Model.Email</p>
+
+            <div class="row g-3">
+                <div class="col-md-6"><strong>Phone:</strong> @Model.Phone</div>
+                <div class="col-md-6"><strong>Specialization:</strong>
+                    @(string.IsNullOrWhiteSpace(Model.SpecializationName) ? "N/A" : Model.SpecializationName)</div>
+                    <div class="col-md-6"><strong>Visit Start:</strong> @Model.VisitingStartTime</div>
+                    <div class="col-md-6"><strong>Visit End:</strong> @Model.VisitingEndTime</div>
+                    <div class="col-md-6"><strong>Honorarium:</strong> @Model.Honorarium</div>
+                    <div class="col-md-6"><strong>Experience:</strong> @Model.ExperienceYears years</div>
+                    <div class="col-md-6"><strong>Status:</strong> @(Model.IsAvailable == true ? "Available" :
+                                                              "Unavailable")</div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a class="btn btn-danger" asp-action="BookAppointment" asp-route-doctorId="@Model.DoctorId">Book
+                            Appointment</a>
+                            <a class="btn btn-outline-secondary" asp-action="Dashboard">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>

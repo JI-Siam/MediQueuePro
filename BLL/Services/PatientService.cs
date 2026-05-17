@@ -1,8 +1,7 @@
 using AutoMapper;
 using BLL;
 using DAL.EF.Tables;
-using System.Security.Cryptography;
-using System.Text;
+
 
 public class PatientService
 {
@@ -22,7 +21,8 @@ public class PatientService
         }
 
         var patient = mapper.Map<Patient>(dto);
-        patient.PasswordHash = HashPassword(dto.Password);
+        // store plain password for now (column name remains PasswordHash)
+        patient.PasswordHash = dto.Password;
         patient.CreatedAt = DateTime.Now;
 
         repo.Add(patient);
@@ -38,9 +38,8 @@ public class PatientService
             return null;
         }
 
-        var hashedPassword = HashPassword(dto.Password);
-
-        if (!string.Equals(patient.PasswordHash, hashedPassword, StringComparison.Ordinal))
+        // plain-text comparison (temporary, per request)
+        if (!string.Equals(patient.PasswordHash, dto.Password, StringComparison.Ordinal))
         {
             return null;
         }
@@ -48,10 +47,49 @@ public class PatientService
         return mapper.Map<PatientDTO>(patient);
     }
 
-    private static string HashPassword(string password)
+    // CRUD: Patient management
+    public List<PatientDTO> GetAll()
     {
-        var passwordBytes = Encoding.UTF8.GetBytes(password);
-        var hashBytes = SHA256.HashData(passwordBytes);
-        return Convert.ToHexString(hashBytes);
+        return mapper.Map<List<PatientDTO>>(repo.GetAll());
+    }
+
+    public PatientDTO? GetById(int id)
+    {
+        var p = repo.GetById(id);
+        return p == null ? null : mapper.Map<PatientDTO>(p);
+    }
+
+    public PatientDTO? Update(int id, PatientDTO dto)
+    {
+        var existing = repo.GetById(id);
+        if (existing == null) return null;
+
+        // update allowed fields
+        existing.FullName = dto.FullName;
+        existing.Phone = dto.Phone;
+        existing.Age = dto.Age;
+        existing.Gender = dto.Gender;
+        existing.BloodGroup = dto.BloodGroup;
+        existing.Address = dto.Address;
+
+        repo.Update(existing);
+        return mapper.Map<PatientDTO>(existing);
+    }
+
+    public bool Delete(int id)
+    {
+        return repo.Delete(id);
+    }
+
+    public List<DoctorDTO> GetAllDoctor()
+    {
+        var doctors = repo.GetAllDoctor();
+        return mapper.Map<List<DoctorDTO>>(doctors);
+    }
+
+    public DoctorDTO? GetDoctorById(int doctorId)
+    {
+        var doctor = repo.GetAllDoctor().FirstOrDefault(doctor => doctor.DoctorId == doctorId);
+        return doctor == null ? null : mapper.Map<DoctorDTO>(doctor);
     }
 }
