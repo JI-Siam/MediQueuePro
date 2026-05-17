@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "hiFBoDool74=",
+  "dgSpecHash": "cbX+7HVTv18=",
   "success": true,
   "projectFilePath": "/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/MvcAppLayer.csproj",
   "expectedPackageFiles": [
+    "/Users/jafirislamsiam/.nuget/packages/automapper/14.0.0/automapper.14.0.0.nupkg.sha512",
     "/Users/jafirislamsiam/.nuget/packages/azure.core/1.47.1/azure.core.1.47.1.nupkg.sha512",
     "/Users/jafirislamsiam/.nuget/packages/azure.identity/1.14.2/azure.identity.1.14.2.nupkg.sha512",
     "/Users/jafirislamsiam/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
@@ -51,5 +52,18 @@
     "/Users/jafirislamsiam/.nuget/packages/system.security.cryptography.pkcs/9.0.4/system.security.cryptography.pkcs.9.0.4.nupkg.sha512",
     "/Users/jafirislamsiam/.nuget/packages/system.security.cryptography.protecteddata/9.0.4/system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'AutoMapper' 14.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
+      "projectPath": "/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/MvcAppLayer.csproj",
+      "warningLevel": 1,
+      "filePath": "/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/MvcAppLayer.csproj",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

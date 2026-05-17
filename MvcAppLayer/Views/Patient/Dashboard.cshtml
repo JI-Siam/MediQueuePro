@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Patient Dashboard";
+    var doctors = ViewBag.Doctors as IEnumerable<string> ?? Enumerable.Empty<string>();
+}
+
+<div class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <span class="badge bg-success mb-2">Logged in</span>
+            <h2 class="fw-bold mb-1">Welcome, @ViewBag.Uname</h2>
+            <p class="text-muted mb-0">Your doctor list will appear here.</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h4 class="mb-3">Doctors</h4>
+
+            @if (!doctors.Any())
+            {
+                <div class="alert alert-light border mb-0">No doctors loaded yet.</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var doctor in doctors)
+                            {
+                                <tr>
+                                    <td>@doctor</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

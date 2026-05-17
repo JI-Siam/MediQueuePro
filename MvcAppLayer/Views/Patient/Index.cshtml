@@ -1,1 +1,24 @@
-<h1>Patient Page</h1>
+@{
+	ViewData["Title"] = "Patient Home";
+}
+
+<div class="container py-5">
+	<div class="row justify-content-center">
+		<div class="col-lg-8">
+			<div class="card shadow-sm border-0">
+				<div class="card-body p-5">
+					<div class="mb-4">
+						<span class="badge bg-primary mb-3">Patient Portal</span>
+						<h1 class="display-6 fw-bold">MediQueuePro</h1>
+						<p class="text-muted mb-0">Register, sign in, and manage your appointments from one place.</p>
+					</div>
+
+					<div class="d-flex gap-3">
+						<a class="btn btn-primary btn-lg" asp-controller="Patient" asp-action="Register">Register</a>
+						<a class="btn btn-outline-secondary btn-lg" asp-controller="Patient" asp-action="Login">Login</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

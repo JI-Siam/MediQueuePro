@@ -227,3 +227,5 @@
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/MvcAppLayer.pdb
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/MvcAppLayer.genruntimeconfig.cache
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/ref/MvcAppLayer.dll
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/MvcAppLayer.MvcApplicationPartsAssemblyInfo.cs
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/bin/Debug/net10.0/AutoMapper.dll

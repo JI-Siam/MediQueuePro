@@ -12,4 +12,26 @@ public class DoctorController : Controller
     {
         return View();
     }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+
+
+
+    public IActionResult List()
+    {
+        return View();
+    }
+
+    // update later 
+
+    public IActionResult Queue(int id)
+    {
+        return View();
+    }
+
 }
