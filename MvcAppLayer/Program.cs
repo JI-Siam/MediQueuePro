@@ -1,7 +1,23 @@
+using DAL.EF;
+using DAL.EF.Tables;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<MediQueueProDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString(
+        "Server=localhost,1433;Database=MediQueueProDB;User Id=sa;Password=StrongPass123!;TrustServerCertificate=True"));
+});
+
+builder.Services.AddScoped<PatientRepo>();
+builder.Services.AddScoped<DoctorRepo>();
+builder.Services.AddScoped<AppointMentRepo>();
+builder.Services.AddScoped<AdminRepo>();
+
 
 var app = builder.Build();
 

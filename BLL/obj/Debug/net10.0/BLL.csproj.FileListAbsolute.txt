@@ -1,0 +1,16 @@
+/Applications/MediQueuePro/MediQueuePro/BLL/bin/Debug/net10.0/BLL.deps.json
+/Applications/MediQueuePro/MediQueuePro/BLL/bin/Debug/net10.0/BLL.dll
+/Applications/MediQueuePro/MediQueuePro/BLL/bin/Debug/net10.0/BLL.pdb
+/Applications/MediQueuePro/MediQueuePro/BLL/bin/Debug/net10.0/DAL.dll
+/Applications/MediQueuePro/MediQueuePro/BLL/bin/Debug/net10.0/DAL.pdb
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.csproj.AssemblyReference.cache
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.GeneratedMSBuildEditorConfig.editorconfig
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.AssemblyInfoInputs.cache
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.AssemblyInfo.cs
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.csproj.CoreCompileInputs.cache
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.sourcelink.json
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.csproj.Up2Date
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.dll
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/refint/BLL.dll
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/BLL.pdb
+/Applications/MediQueuePro/MediQueuePro/BLL/obj/Debug/net10.0/ref/BLL.dll

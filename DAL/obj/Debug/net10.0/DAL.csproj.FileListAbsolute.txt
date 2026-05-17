@@ -1,0 +1,15 @@
+/Applications/MediQueuePro/MediQueuePro/DAL/bin/Debug/net10.0/DAL.deps.json
+/Applications/MediQueuePro/MediQueuePro/DAL/bin/Debug/net10.0/DAL.runtimeconfig.json
+/Applications/MediQueuePro/MediQueuePro/DAL/bin/Debug/net10.0/DAL.dll
+/Applications/MediQueuePro/MediQueuePro/DAL/bin/Debug/net10.0/DAL.pdb
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.csproj.AssemblyReference.cache
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.GeneratedMSBuildEditorConfig.editorconfig
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.AssemblyInfoInputs.cache
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.AssemblyInfo.cs
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.csproj.CoreCompileInputs.cache
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.sourcelink.json
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.dll
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/refint/DAL.dll
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.pdb
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/DAL.genruntimeconfig.cache
+/Applications/MediQueuePro/MediQueuePro/DAL/obj/Debug/net10.0/ref/DAL.dll
