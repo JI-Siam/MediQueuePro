@@ -45,12 +45,14 @@ public class DoctorService
         return mapper.Map<DoctorDTO>(doctor);
     }
 
-    public DoctorDTO? Update(int id, DoctorDTO dto)
+    public DoctorDTO? Update(int id, DoctorRegDTO dto)
     {
         var existing = repo.GetById(id);
         if (existing == null) return null;
 
         existing.FullName = dto.FullName;
+        existing.Email = dto.Email;
+        existing.PasswordHash = dto.Password;
         existing.Phone = dto.Phone;
         existing.SpecializationId = dto.SpecializationId;
         existing.VisitingStartTime = dto.VisitingStartTime;
@@ -58,9 +60,28 @@ public class DoctorService
         existing.Honorarium = dto.Honorarium;
         existing.ExperienceYears = dto.ExperienceYears;
         existing.IsAvailable = dto.IsAvailable;
-
         repo.Update(existing);
-        return mapper.Map<DoctorDTO>(existing);
+        var updatedDoctor = mapper.Map<DoctorDTO>(existing);
+        return updatedDoctor;
+    }
+
+    public DoctorRegDTO? GetEditModel(int id)
+    {
+        var doctor = repo.GetById(id);
+        if (doctor == null) return null;
+
+        return new DoctorRegDTO
+        {
+            FullName = doctor.FullName,
+            Email = doctor.Email,
+            Phone = doctor.Phone,
+            SpecializationId = doctor.SpecializationId,
+            VisitingStartTime = doctor.VisitingStartTime,
+            VisitingEndTime = doctor.VisitingEndTime,
+            Honorarium = doctor.Honorarium,
+            ExperienceYears = doctor.ExperienceYears,
+            IsAvailable = doctor.IsAvailable
+        };
     }
 
     public bool Delete(int id)
@@ -91,5 +112,5 @@ public class DoctorService
         return doctor == null ? null : mapper.Map<DoctorDTO>(doctor);
     }
 
-    // Note: password hashing removed per request; plain passwords are stored in the PasswordHash column temporarily.
+
 }

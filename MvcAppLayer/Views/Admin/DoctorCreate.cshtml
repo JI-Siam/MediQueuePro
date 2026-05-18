@@ -1,0 +1,92 @@
+@model DoctorRegDTO
+@{
+    ViewData["Title"] = "Create Doctor";
+    var specializations = ViewBag.Specializations as List<DAL.EF.Tables.Specialization> ?? new
+List<DAL.EF.Tables.Specialization>();
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+                        <div>
+                            <span class="badge bg-danger bg-gradient mb-2">Admin Doctor</span>
+                            <h2 class="fw-bold mb-1">Create Doctor</h2>
+                            <p class="text-muted mb-0">Register a new doctor using the same DoctorRegister fields.</p>
+                        </div>
+                        <a class="btn btn-outline-secondary" asp-action="Doctors">Back</a>
+                    </div>
+
+                    <form asp-action="DoctorCreate" method="post" class="row g-3">
+                        @Html.AntiForgeryToken()
+                        <div class="col-12">
+                            <label class="form-label">Full name</label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            <input asp-for="Phone" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Specialization</label>
+                            <select asp-for="SpecializationId" class="form-select">
+                                <option value="">Select specialization</option>
+                                @foreach (var specialization in specializations)
+                                {
+                                    <option value="@specialization.SpecializationId">@specialization.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="SpecializationId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Visit start</label>
+                            <input asp-for="VisitingStartTime" type="time" class="form-control" />
+                            <span asp-validation-for="VisitingStartTime" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Visit end</label>
+                            <input asp-for="VisitingEndTime" type="time" class="form-control" />
+                            <span asp-validation-for="VisitingEndTime" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Availability</label>
+                            <select asp-for="IsAvailable" class="form-select">
+                                <option value="">Select status</option>
+                                <option value="true">Available</option>
+                                <option value="false">Unavailable</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Honorarium</label>
+                            <input asp-for="Honorarium" type="number" step="0.01" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Experience years</label>
+                            <input asp-for="ExperienceYears" type="number" class="form-control" />
+                        </div>
+                        <div class="col-12 d-grid mt-3">
+                            <button type="submit" class="btn btn-danger btn-lg">Create Doctor</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

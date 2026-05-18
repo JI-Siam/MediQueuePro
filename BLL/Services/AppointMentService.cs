@@ -31,14 +31,14 @@ public class AppointMentService
 
     public List<AppointmentDTO> GetQueueByDoctorId(int doctorId)
     {
-        // default to today's date; repository will return an already-ordered queue
+
         var date = DateOnly.FromDateTime(DateTime.Today);
         return mapper.Map<List<AppointmentDTO>>(repo.GetQueueByDoctorId(doctorId, date));
     }
 
     public List<AppointmentDTO> GetPatientQueues(int patientId)
     {
-        // Let repository/database return the properly filtered and ordered queue list
+
         var date = DateOnly.FromDateTime(DateTime.Today);
         return mapper.Map<List<AppointmentDTO>>(repo.GetQueueByPatientId(patientId, date));
     }
@@ -71,5 +71,10 @@ public class AppointMentService
     {
         var updated = repo.UpdateStatus(appointmentId, status);
         return updated == null ? null : mapper.Map<AppointmentDTO>(updated);
+    }
+
+    public List<AppointmentDTO> GetAll()
+    {
+        return mapper.Map<List<AppointmentDTO>>(repo.GetAll());
     }
 }

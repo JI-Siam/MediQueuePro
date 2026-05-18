@@ -10,7 +10,7 @@
     var patientTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Login", "Patient") : Url.Action("Dashboard",
 "Patient");
     var doctorTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Login", "Doctor") : Url.Action("Index", "Doctor");
-    var adminTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Index", "Home") : Url.Action("Index", "Admin");
+    var adminTarget = string.IsNullOrWhiteSpace(userName) ? Url.Action("Login", "Admin") : Url.Action("Index", "Admin");
 }
 
 <style>

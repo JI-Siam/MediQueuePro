@@ -1,5 +1,6 @@
 using DAL.EF;
 using DAL.EF.Tables;
+using Microsoft.EntityFrameworkCore;
 
 public class AdminRepo
 {
@@ -25,6 +26,23 @@ public class AdminRepo
     public Admin? GetById(int id)
     {
         return db.Admins.FirstOrDefault(a => a.AdminId == id);
+    }
+
+    public Admin? GetByEmail(string email)
+    {
+        return db.Admins.FirstOrDefault(a => a.Email == email);
+    }
+
+    public List<Appointment> GetAppointmentsWithDetails()
+    {
+        return db.Appointments
+            .Include(appointment => appointment.Doctor)
+                .ThenInclude(doctor => doctor.Specialization)
+            .Include(appointment => appointment.Patient)
+            .OrderByDescending(appointment => appointment.CreatedAt)
+            .ThenByDescending(appointment => appointment.AppointmentDate)
+            .ThenByDescending(appointment => appointment.AppointmentTime)
+            .ToList();
     }
 
     public Admin Update(Admin admin)

@@ -21,7 +21,6 @@ public class PatientService
         }
 
         var patient = mapper.Map<Patient>(dto);
-        // store plain password for now (column name remains PasswordHash)
         patient.PasswordHash = dto.Password;
         patient.CreatedAt = DateTime.Now;
 
@@ -66,6 +65,42 @@ public class PatientService
 
         // update allowed fields
         existing.FullName = dto.FullName;
+        existing.Phone = dto.Phone;
+        existing.Age = dto.Age;
+        existing.Gender = dto.Gender;
+        existing.BloodGroup = dto.BloodGroup;
+        existing.Address = dto.Address;
+
+        repo.Update(existing);
+        return mapper.Map<PatientDTO>(existing);
+    }
+
+    public PatientRegDTO? GetEditModel(int id)
+    {
+        var p = repo.GetById(id);
+        if (p == null) return null;
+
+        return new PatientRegDTO
+        {
+            FullName = p.FullName,
+            Email = p.Email,
+            Password = p.PasswordHash,
+            Phone = p.Phone,
+            Age = p.Age,
+            Gender = p.Gender,
+            BloodGroup = p.BloodGroup,
+            Address = p.Address
+        };
+    }
+
+    public PatientDTO? UpdateFromReg(int id, PatientRegDTO dto)
+    {
+        var existing = repo.GetById(id);
+        if (existing == null) return null;
+
+        existing.FullName = dto.FullName;
+        existing.Email = dto.Email;
+        existing.PasswordHash = dto.Password; // plain-text for now per project state
         existing.Phone = dto.Phone;
         existing.Age = dto.Age;
         existing.Gender = dto.Gender;

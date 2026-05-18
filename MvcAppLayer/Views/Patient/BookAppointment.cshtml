@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Book Appointment";
     var doctor = ViewBag.Doctor as DoctorDTO;
+    var canBook = ViewBag.CanBook as bool? ?? true;
 }
 
 <div class="container py-5">
@@ -33,57 +34,64 @@
                             <div class="alert alert-danger">@ViewBag.Error</div>
                         }
 
-                        <form asp-action="BookAppointment" method="post" id="appointmentForm">
-                            @Html.AntiForgeryToken()
-                            <input asp-for="DoctorId" type="hidden" />
-                            <input asp-for="AppointmentDate" type="hidden" />
-                            <input asp-for="AppointmentTime" type="hidden" id="AppointmentTime" />
+                        @if (canBook)
+                        {
+                            <form asp-action="BookAppointment" method="post" id="appointmentForm">
+                                @Html.AntiForgeryToken()
+                                <input asp-for="DoctorId" type="hidden" />
+                                <input asp-for="AppointmentDate" type="hidden" />
+                                <input asp-for="AppointmentTime" type="hidden" id="AppointmentTime" />
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Appointment Date</label>
-                                    <input type="text" class="form-control"
-                                           value="@Model.AppointmentDate.ToString("yyyy-MM-dd")" readonly />
-                                    <small class="text-muted">This is fixed to today.</small>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Appointment Date</label>
+                                        <input type="text" class="form-control"
+                                               value="@Model.AppointmentDate.ToString("yyyy-MM-dd")" readonly />
+                                        <small class="text-muted">This is fixed to today.</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Confirmation Time (UTC)</label>
+                                        <input type="text" class="form-control" id="DisplayUtcTime" readonly />
+                                        <small class="text-muted">Captured when you confirm booking.</small>
+                                    </div>
+                                    <div class="col-12 form-check mt-2 ms-2">
+                                        <input asp-for="IsEmergency" class="form-check-input" id="IsEmergency" />
+                                        <label class="form-check-label" for="IsEmergency">Emergency appointment</label>
+                                    </div>
+                                    <div class="col-12 d-grid mt-3">
+                                        <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal"
+                                                data-bs-target="#confirmModal">Review & Confirm</button>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Confirmation Time (UTC)</label>
-                                    <input type="text" class="form-control" id="DisplayUtcTime" readonly />
-                                    <small class="text-muted">Captured when you confirm booking.</small>
-                                </div>
-                                <div class="col-12 form-check mt-2 ms-2">
-                                    <input asp-for="IsEmergency" class="form-check-input" id="IsEmergency" />
-                                    <label class="form-check-label" for="IsEmergency">Emergency appointment</label>
-                                </div>
-                                <div class="col-12 d-grid mt-3">
-                                    <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal"
-                                            data-bs-target="#confirmModal">Review & Confirm</button>
-                                </div>
-                            </div>
 
-                            <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Confirm appointment</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p class="mb-2"><strong>Doctor:</strong> @(doctor?.FullName ?? "Doctor")</p>
-                                            <p class="mb-2"><strong>Date:</strong> <span id="confirmDate"></span></p>
-                                            <p class="mb-2"><strong>Time:</strong> <span id="confirmTime"></span></p>
-                                            <p class="mb-0"><strong>Type:</strong> <span id="confirmEmergency"></span></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-danger">Confirm & Book</button>
+                                <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm appointment</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="mb-2"><strong>Doctor:</strong> @(doctor?.FullName ?? "Doctor")</p>
+                                                <p class="mb-2"><strong>Date:</strong> <span id="confirmDate"></span></p>
+                                                <p class="mb-2"><strong>Time:</strong> <span id="confirmTime"></span></p>
+                                                <p class="mb-0"><strong>Type:</strong> <span id="confirmEmergency"></span></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Confirm & Book</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning mb-0">This doctor is currently unavailable.</div>
+                        }
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -12,16 +13,25 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Layout: make body a column so footer sits after content and doesn't overlap */
 body {
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
   background-image: linear-gradient(135deg, rgba(255, 99, 132, 0.08) 0%, rgba(255, 99, 132, 0.02) 55%, rgba(255, 255, 255, 0) 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+/* Make the main container grow to fill available space so footer is pushed down */
+body > .container {
+  flex: 1 0 auto;
+}
+
+main[role="main"] {
+  flex: 1 0 auto;
+  padding-bottom: 1rem;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

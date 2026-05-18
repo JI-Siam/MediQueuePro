@@ -1,0 +1,47 @@
+@model List<PatientDTO>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="badge bg-danger bg-gradient mb-2">Patients</span>
+            <h2 class="fw-bold mb-1">Manage Patients</h2>
+            <p class="text-muted mb-0">Review patient accounts and keep profiles up to date.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="Analytics">Analytics</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@p.FullName</td>
+                        <td>@p.Email</td>
+                        <td>@p.Phone</td>
+                        <td>@(p.CreatedAt?.ToString("yyyy-MM-dd"))</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="PatientEdit"
+                               asp-route-id="@p.PatientId">Edit</a>
+                            <form asp-controller="Admin" asp-action="PatientDelete" method="post" class="d-inline-block">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.PatientId" />
+                                <button class="btn btn-sm btn-danger" type="submit"
+                                        onclick="return confirm('Delete this patient?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

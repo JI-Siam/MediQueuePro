@@ -49,32 +49,32 @@ public class AppointMentRepo
     public List<Appointment> GetQueueByDoctorId(int doctorId, DateOnly? appointmentDate = null)
     {
         var date = appointmentDate ?? DateOnly.FromDateTime(DateTime.Today);
-
-        return db.Appointments
+        var queue = db.Appointments
             .Include(a => a.Doctor)
             .Include(a => a.Patient)
             .Where(a => a.DoctorId == doctorId && a.AppointmentDate == date)
-            // keep non-completed first, then completed at the bottom
             .OrderBy(a => a.Status == "Completed")
             .ThenByDescending(a => a.IsEmergency == true)
             .ThenBy(a => a.QueueToken)
             .ToList();
+
+        return queue;
     }
 
     public List<Appointment> GetQueueByPatientId(int patientId, DateOnly? appointmentDate = null)
     {
         var date = appointmentDate ?? DateOnly.FromDateTime(DateTime.Today);
-
-        return db.Appointments
+        var queue = db.Appointments
             .Include(a => a.Doctor)
             .Include(a => a.Patient)
             .Where(a => a.PatientId == patientId && a.AppointmentDate == date)
-            // non-completed first, then completed at the bottom
             .OrderBy(a => a.Status == "Completed")
             .ThenByDescending(a => a.IsEmergency == true)
             .ThenBy(a => a.Doctor!.FullName)
             .ThenBy(a => a.QueueToken)
             .ToList();
+
+        return queue;
     }
 
     public Appointment? GetById(int appointmentId)

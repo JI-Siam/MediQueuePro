@@ -19,6 +19,59 @@ public class DoctorController : Controller
         return View();
     }
 
+    [DoctorAccess]
+    [HttpGet]
+    public IActionResult Edit()
+    {
+        var doctorId = HttpContext.Session.GetInt32("UID");
+        if (doctorId == null)
+        {
+            return RedirectToAction(nameof(Login));
+        }
+
+        var model = srvc.GetEditModel(doctorId.Value);
+        if (model == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Specializations = srvc.GetSpecializations();
+        ViewBag.DoctorId = doctorId.Value;
+        return View(model);
+    }
+
+    [DoctorAccess]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(DoctorRegDTO formObj)
+    {
+        var doctorId = HttpContext.Session.GetInt32("UID");
+        if (doctorId == null)
+        {
+            return RedirectToAction(nameof(Login));
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Specializations = srvc.GetSpecializations();
+            ViewBag.DoctorId = doctorId.Value;
+            return View(formObj);
+        }
+
+        var updated = srvc.Update(doctorId.Value, formObj);
+        if (updated == null)
+        {
+            ViewBag.Specializations = srvc.GetSpecializations();
+            ViewBag.DoctorId = doctorId.Value;
+            ViewBag.Error = "Unable to update doctor profile.";
+            return View(formObj);
+        }
+
+        HttpContext.Session.SetString("Uname", updated.FullName);
+        TempData["Message"] = "Profile updated successfully.";
+        return RedirectToAction(nameof(Index));
+    }
+
     [NotLogged]
     [HttpGet]
     public IActionResult Login()
@@ -94,17 +147,7 @@ public class DoctorController : Controller
         return View(appointmentService.GetQueueByDoctorId(id));
     }
 
-    [DoctorAccess]
-    [HttpGet]
-    public IActionResult GetQueueJson(int id)
-    {
-        var doctorId = HttpContext.Session.GetInt32("UID");
-        if (doctorId == null) return Unauthorized();
-        if (doctorId.Value != id) return Forbid();
 
-        var queue = appointmentService.GetQueueByDoctorId(id);
-        return Json(queue);
-    }
 
     [HttpPost]
     [DoctorAccess]

@@ -98,6 +98,47 @@ public class PatientController : Controller
     }
 
     [PatientAccess]
+    [HttpGet]
+    public IActionResult Edit()
+    {
+        var patientId = HttpContext.Session.GetInt32("UID");
+        if (patientId == null) return RedirectToAction(nameof(Login));
+
+        var model = srvc.GetEditModel(patientId.Value);
+        if (model == null) return NotFound();
+
+        ViewBag.PatientId = patientId.Value;
+        return View(model);
+    }
+
+    [PatientAccess]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(PatientRegDTO formObj)
+    {
+        var patientId = HttpContext.Session.GetInt32("UID");
+        if (patientId == null) return RedirectToAction(nameof(Login));
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.PatientId = patientId.Value;
+            return View(formObj);
+        }
+
+        var updated = srvc.UpdateFromReg(patientId.Value, formObj);
+        if (updated == null)
+        {
+            ViewBag.PatientId = patientId.Value;
+            ViewBag.Error = "Unable to update profile.";
+            return View(formObj);
+        }
+
+        HttpContext.Session.SetString("Uname", updated.FullName);
+        TempData["Message"] = "Profile updated successfully.";
+        return RedirectToAction(nameof(Dashboard));
+    }
+
+    [PatientAccess]
     public IActionResult DoctorDetails(int id)
     {
         var doctor = doctorService.GetById(id);
@@ -122,6 +163,12 @@ public class PatientController : Controller
         }
 
         ViewBag.Doctor = doctor;
+        ViewBag.CanBook = doctor.IsAvailable == true;
+        if (doctor.IsAvailable != true)
+        {
+            ViewBag.Error = "This doctor is currently unavailable.";
+        }
+
         return View(new AppointmentCreateDTO
         {
             DoctorId = doctorId,
@@ -135,10 +182,24 @@ public class PatientController : Controller
     public IActionResult BookAppointment(AppointmentCreateDTO dto)
     {
         dto.AppointmentDate = DateOnly.FromDateTime(DateTime.Today);
+        var doctor = doctorService.GetById(dto.DoctorId);
+
+        if (doctor == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Doctor = doctor;
+        ViewBag.CanBook = doctor.IsAvailable == true;
+
+        if (doctor.IsAvailable != true)
+        {
+            ViewBag.Error = "This doctor is currently unavailable.";
+            return View(dto);
+        }
 
         if (!ModelState.IsValid)
         {
-            ViewBag.Doctor = doctorService.GetById(dto.DoctorId);
             return View(dto);
         }
 
@@ -151,7 +212,6 @@ public class PatientController : Controller
         var appointment = appointmentService.Book(patientId.Value, dto);
         if (appointment == null)
         {
-            ViewBag.Doctor = doctorService.GetById(dto.DoctorId);
             ViewBag.Error = "You already have an appointment with this doctor today.";
             return View(dto);
         }
@@ -193,8 +253,9 @@ public class PatientController : Controller
 
         var selectedDoctorId = doctorId ?? doctors[0].DoctorId;
         ViewBag.SelectedDoctorId = selectedDoctorId;
+        var queue = appointmentService.GetQueueByDoctorId(selectedDoctorId);
 
-        return View(appointmentService.GetQueueByDoctorId(selectedDoctorId));
+        return View(queue);
     }
 
     [PatientAccess]

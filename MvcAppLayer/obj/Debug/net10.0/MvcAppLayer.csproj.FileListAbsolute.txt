@@ -213,8 +213,6 @@
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/ii94izj096-{0}-muycvpuwrr-muycvpuwrr.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/w46tbo65gt-{0}-87fc7y1x7t-87fc7y1x7t.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/lopoe90bzs-{0}-jfsiqqwiad-jfsiqqwiad.gz
-/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/coryj8m8wn-{0}-eujbcrsr5q-eujbcrsr5q.gz
-/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/6ndqvegvpq-{0}-eujbcrsr5q-eujbcrsr5q.gz
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/staticwebassets.build.json
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/staticwebassets.build.json.cache
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/staticwebassets.development.json
@@ -228,4 +226,6 @@
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/ref/MvcAppLayer.dll
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/MvcAppLayer.MvcApplicationPartsAssemblyInfo.cs
 /Applications/MediQueuePro/MediQueuePro/MvcAppLayer/bin/Debug/net10.0/AutoMapper.dll
-/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/xjyxmxywpk-{0}-3phu357z36-3phu357z36.gz
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/xjyxmxywpk-{0}-pn1i2j9l5q-pn1i2j9l5q.gz
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/coryj8m8wn-{0}-9g60a44czk-9g60a44czk.gz
+/Applications/MediQueuePro/MediQueuePro/MvcAppLayer/obj/Debug/net10.0/compressed/6ndqvegvpq-{0}-9g60a44czk-9g60a44czk.gz

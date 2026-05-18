@@ -13,8 +13,9 @@
             <div class="d-flex gap-3 flex-wrap">
                 <a class="btn btn-outline-danger" asp-action="List">Doctor List</a>
                 <a class="btn btn-outline-primary" asp-action="Queue" asp-route-id="@doctorId">Queue</a>
+                <a class="btn btn-outline-danger" asp-action="Edit">Edit Profile</a>
                 <a class="btn btn-outline-secondary" asp-action="Logout">Logout</a>
             </div>
         </div>
-                var doctorId = ViewContext.HttpContext.Session.GetInt32("UID");
-</div>
+
+    </div>

@@ -1,0 +1,56 @@
+@model List<DoctorDTO>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="badge bg-danger bg-gradient mb-2">Doctors</span>
+            <h2 class="fw-bold mb-1">Manage Doctors</h2>
+            <p class="text-muted mb-0">Create, edit, and remove doctors from one place.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-danger" asp-action="DoctorCreate">Add Doctor</a>
+            <a class="btn btn-outline-secondary" asp-action="Analytics">Analytics</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Specialization</th>
+                    <th>Phone</th>
+                    <th>Available</th>
+                    <th>Created</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@d.FullName</td>
+                        <td>@d.SpecializationName</td>
+                        <td>@d.Phone</td>
+                        <td>
+                            <span class="badge @(d.IsAvailable == true ? "text-bg-success" : "text-bg-secondary")">
+                                @(d.IsAvailable == true ? "Yes" : "No")
+                            </span>
+                        </td>
+                        <td>@(d.CreatedAt?.ToString("yyyy-MM-dd"))</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="DoctorEdit"
+                               asp-route-id="@d.DoctorId">Edit</a>
+                            <form asp-controller="Admin" asp-action="DoctorDelete" method="post" class="d-inline-block">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@d.DoctorId" />
+                                <button class="btn btn-sm btn-danger" type="submit"
+                                        onclick="return confirm('Delete this doctor?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

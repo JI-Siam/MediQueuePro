@@ -14,7 +14,10 @@ List<DAL.EF.Tables.Specialization>();
             <h2 class="fw-bold mb-1">Welcome, @ViewBag.Uname</h2>
             <p class="text-muted mb-0">Explore doctors and book an appointment.</p>
         </div>
-        <a class="btn btn-outline-danger" asp-action="Appointments">My Appointments</a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-danger" asp-action="Appointments">My Appointments</a>
+            <a class="btn btn-outline-primary" asp-action="Edit">Edit Profile</a>
+        </div>
     </div>
 
     <form method="get" asp-action="Dashboard" class="card shadow-sm border-0 mb-4">
@@ -89,8 +92,16 @@ List<DAL.EF.Tables.Specialization>();
                                     <div class="d-flex gap-2 flex-wrap">
                                         <a class="btn btn-outline-danger" asp-action="DoctorDetails"
                                            asp-route-id="@doctor.DoctorId">View Details</a>
-                                        <a class="btn btn-danger" asp-action="BookAppointment"
-                                           asp-route-doctorId="@doctor.DoctorId">Book Appointment</a>
+                                        @if (doctor.IsAvailable == true)
+                                        {
+                                            <a class="btn btn-danger" asp-action="BookAppointment"
+                                               asp-route-doctorId="@doctor.DoctorId">Book Appointment</a>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-secondary" type="button" disabled
+                                                    title="This doctor is currently unavailable">Unavailable</button>
+                                        }
                                     </div>
                                 </div>
                             </div>

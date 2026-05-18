@@ -1,0 +1,162 @@
+@model AdminAnalyticsDashboardDTO
+
+@{
+    ViewData["Title"] = "Admin Analytics";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <span class="badge bg-danger bg-gradient mb-2">Analytics</span>
+            <h2 class="fw-bold mb-1">Doctor and specialization insights</h2>
+            <p class="text-muted mb-0">Track bookings, visits, and patient distribution with drill-down details.</p>
+        </div>
+        <a class="btn btn-outline-secondary" asp-action="Index">Dashboard</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Doctors</div>
+                    <div class="display-6 fw-bold">@Model.Summary.TotalDoctors</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Patients</div>
+                    <div class="display-6 fw-bold">@Model.Summary.TotalPatients</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Bookings / Visits Today</div>
+                    <div class="display-6 fw-bold">@Model.Summary.TodayVisits</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav nav-pills mb-3" id="analyticsTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="doctors-tab" data-bs-toggle="pill" data-bs-target="#doctors-pane"
+                    type="button" role="tab">Doctors</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="specializations-tab" data-bs-toggle="pill"
+                    data-bs-target="#specializations-pane" type="button" role="tab">Specializations</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="patients-tab" data-bs-toggle="pill" data-bs-target="#patients-pane"
+                    type="button" role="tab">Unique Patients</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="doctors-pane" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialization</th>
+                            <th>Bookings</th>
+                            <th>Visits</th>
+                            <th>Today</th>
+                            <th>Unique Patients</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doctor in Model.Doctors)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@doctor.DoctorName</td>
+                                <td>@doctor.SpecializationName</td>
+                                <td>@doctor.TotalBookings</td>
+                                <td>@doctor.TotalVisits</td>
+                                <td>@doctor.TodayVisits</td>
+                                <td>@doctor.UniquePatients</td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-danger" asp-action="DoctorPatients"
+                                       asp-route-id="@doctor.DoctorId">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="specializations-pane" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Specialization</th>
+                            <th>Doctors</th>
+                            <th>Bookings</th>
+                            <th>Visits</th>
+                            <th>Unique Patients</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var specialization in Model.Specializations)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@specialization.SpecializationName</td>
+                                <td>@specialization.DoctorsCount</td>
+                                <td>@specialization.TotalBookings</td>
+                                <td>@specialization.TotalVisits</td>
+                                <td>@specialization.UniquePatients</td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-danger" asp-action="SpecializationPatients"
+                                       asp-route-id="@specialization.SpecializationId">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="patients-pane" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Bookings</th>
+                            <th>Visits</th>
+                            <th>Last Appointment</th>
+                            <th>Last Doctor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var patient in Model.UniquePatients)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@patient.FullName</td>
+                                <td>@patient.Email</td>
+                                <td>@patient.Phone</td>
+                                <td>@patient.TotalBookings</td>
+                                <td>@patient.TotalVisits</td>
+                                <td>@patient.LastAppointmentDate</td>
+                                <td>@patient.LastDoctorName</td>
+                                <td>@patient.LastStatus</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

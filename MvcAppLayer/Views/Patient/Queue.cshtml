@@ -44,7 +44,10 @@
                             <td>@appointment.AppointmentTime.ToString("HH:mm:ss")</td>
                             <td>@estimatedMinutes min</td>
                             <td>@(appointment.IsEmergency ? "Yes" : "No")</td>
-                            <td>@appointment.Status</td>
+                            <td
+                                class="@(appointment.Status == "Completed" ? "text-success" : appointment.Status == "Pending" ? "text-warning" : "text-primary")">
+                                @appointment.Status
+                            </td>
                         </tr>
                     }
                 </tbody>

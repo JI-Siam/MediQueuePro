@@ -4,6 +4,8 @@
     var doctors = ViewBag.Doctors as List<DoctorDTO> ?? new List<DoctorDTO>();
     int? selectedDoctorId = ViewBag.SelectedDoctorId as int?;
     var currentPatientId = ViewBag.CurrentPatientId as int?;
+    var selectedDoctor = doctors.FirstOrDefault(doctor => doctor.DoctorId == selectedDoctorId)
+                         ?? doctors.FirstOrDefault();
 }
 
 <div class="container py-5">
@@ -31,10 +33,15 @@
                     }
                 }
             </select>
+
         </div>
         <div class="col-md-2">
             <button class="btn btn-danger w-100" type="submit">Show</button>
         </div>
+        @if (selectedDoctor != null)
+        {
+            <h5>Visiting Time - @selectedDoctor.VisitingStartTime - @selectedDoctor.VisitingEndTime</h5>
+        }
     </form>
 
     @if (Model == null || Model.Count == 0)
@@ -76,7 +83,9 @@
                                     <td>@appointment.AppointmentTime.ToString("HH:mm:ss")</td>
                                     <td>@estimatedMinutes min</td>
                                     <td>@(appointment.IsEmergency ? "Yes" : "No")</td>
-                                    <td class="@(appointment.Status == "Completed" ? "text-success" : "")">@appointment.Status
+                                    <td
+                                        class="@(appointment.Status == "Completed" ? "text-success" : appointment.Status == "Pending" ? "text-warning" : "text-primary")">
+                                        @appointment.Status
                                     </td>
                                     <td>
                                         @if (isCurrentPatient)
