@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class SpecializationRepo
 {
-    private readonly MediQueueProDbContext db;
+    MediQueueProDbContext db;
 
     public SpecializationRepo(MediQueueProDbContext db)
     {

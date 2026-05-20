@@ -14,63 +14,12 @@ public class DoctorController : Controller
     [DoctorAccess]
     public IActionResult Index()
     {
+        // get the names and type stored in session
         ViewBag.Uname = HttpContext.Session.GetString("Uname");
         ViewBag.UType = HttpContext.Session.GetInt32("UType");
         return View();
     }
 
-    [DoctorAccess]
-    [HttpGet]
-    public IActionResult Edit()
-    {
-        var doctorId = HttpContext.Session.GetInt32("UID");
-        if (doctorId == null)
-        {
-            return RedirectToAction(nameof(Login));
-        }
-
-        var model = srvc.GetEditModel(doctorId.Value);
-        if (model == null)
-        {
-            return NotFound();
-        }
-
-        ViewBag.Specializations = srvc.GetSpecializations();
-        ViewBag.DoctorId = doctorId.Value;
-        return View(model);
-    }
-
-    [DoctorAccess]
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Edit(DoctorRegDTO formObj)
-    {
-        var doctorId = HttpContext.Session.GetInt32("UID");
-        if (doctorId == null)
-        {
-            return RedirectToAction(nameof(Login));
-        }
-
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Specializations = srvc.GetSpecializations();
-            ViewBag.DoctorId = doctorId.Value;
-            return View(formObj);
-        }
-
-        var updated = srvc.Update(doctorId.Value, formObj);
-        if (updated == null)
-        {
-            ViewBag.Specializations = srvc.GetSpecializations();
-            ViewBag.DoctorId = doctorId.Value;
-            ViewBag.Error = "Unable to update doctor profile.";
-            return View(formObj);
-        }
-
-        HttpContext.Session.SetString("Uname", updated.FullName);
-        TempData["Message"] = "Profile updated successfully.";
-        return RedirectToAction(nameof(Index));
-    }
 
     [NotLogged]
     [HttpGet]
@@ -78,6 +27,7 @@ public class DoctorController : Controller
     {
         return View(new LoginDTO());
     }
+
 
     [NotLogged]
     [HttpPost]
@@ -100,8 +50,9 @@ public class DoctorController : Controller
         HttpContext.Session.SetInt32("UType", 3);
         HttpContext.Session.SetInt32("UID", doctor.DoctorId);
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("Index");
     }
+
 
     [DoctorAccess]
     public IActionResult List()
@@ -111,12 +62,67 @@ public class DoctorController : Controller
     }
 
     [DoctorAccess]
+    [HttpGet]
+    public IActionResult Edit()
+    {
+        var doctorId = HttpContext.Session.GetInt32("UID");
+        if (doctorId == null)
+        {
+            return RedirectToAction("Login");
+        }
+
+        var model = srvc.GetEditModel(doctorId.Value);
+        if (model == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Specializations = srvc.GetSpecializations();
+        ViewBag.DoctorId = doctorId.Value;
+        return View(model);
+    }
+
+    [DoctorAccess]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(DoctorRegDTO formObj)
+    {
+        var doctorId = HttpContext.Session.GetInt32("UID");
+        if (doctorId == null)
+        {
+            return RedirectToAction("Login");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Specializations = srvc.GetSpecializations();
+            ViewBag.DoctorId = doctorId.Value;
+            return View(formObj);
+        }
+
+        var updated = srvc.Update(doctorId.Value, formObj);
+        if (updated == null)
+        {
+            ViewBag.Specializations = srvc.GetSpecializations();
+            ViewBag.DoctorId = doctorId.Value;
+            ViewBag.Error = "Unable to update doctor profile.";
+            return View(formObj);
+        }
+
+        HttpContext.Session.SetString("Uname", updated.FullName);
+        TempData["Message"] = "Profile updated successfully.";
+        return RedirectToAction("Index");
+    }
+
+
+
+    [DoctorAccess]
     public IActionResult Appointments()
     {
         var doctorId = HttpContext.Session.GetInt32("UID");
         if (doctorId == null)
         {
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         return View(appointmentService.GetByDoctorId(doctorId.Value));
@@ -128,7 +134,7 @@ public class DoctorController : Controller
         var doctorId = HttpContext.Session.GetInt32("UID");
         if (doctorId == null)
         {
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         var appointment = appointmentService.GetById(id);
@@ -167,19 +173,10 @@ public class DoctorController : Controller
         if (updated == null)
         {
             TempData["Error"] = "Unable to update status.";
-            return RedirectToAction(nameof(Queue), new { id = doctorId.Value });
+            return RedirectToAction("Queue", new { id = doctorId.Value });
         }
 
-        if (string.Equals(status, "Waiting", StringComparison.OrdinalIgnoreCase))
-        {
-            TempData["Message"] = $"Token {updated.QueueToken} marked Waiting. Please call the patient to visit.";
-        }
-        else if (string.Equals(status, "Completed", StringComparison.OrdinalIgnoreCase))
-        {
-            TempData["Message"] = $"Token {updated.QueueToken} marked Completed and moved to end of queue.";
-        }
-
-        return RedirectToAction(nameof(Queue), new { id = doctorId.Value });
+        return RedirectToAction("Queue", new { id = doctorId.Value });
     }
 
     public IActionResult Logout()

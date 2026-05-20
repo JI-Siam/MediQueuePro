@@ -4,8 +4,8 @@ using DAL.EF.Tables;
 
 public class AppointMentService
 {
-    private readonly AppointMentRepo repo;
-    private readonly Mapper mapper;
+    AppointMentRepo repo;
+    Mapper mapper;
 
     public AppointMentService(AppointMentRepo repo)
     {
@@ -51,6 +51,7 @@ public class AppointMentService
         }
 
         var appointment = mapper.Map<Appointment>(dto);
+
         var confirmedAtUtc = DateTime.UtcNow;
 
         appointment.PatientId = patientId;

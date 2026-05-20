@@ -5,22 +5,21 @@ using DAL.EF.Tables;
 public class AdminService
 {
     AdminRepo repo;
-    private readonly DoctorRepo doctorRepo;
-    private readonly PatientRepo patientRepo;
+    DoctorRepo doctorRepo;
+    PatientRepo patientRepo;
+    Mapper mapper;
 
     public AdminService(AdminRepo repo, DoctorRepo doctorRepo, PatientRepo patientRepo)
     {
         this.repo = repo;
         this.doctorRepo = doctorRepo;
         this.patientRepo = patientRepo;
+        mapper = MapperConfig.GetMapper();
     }
-
-    private readonly Mapper mapper = MapperConfig.GetMapper();
 
     public AdminDTO Add(AdminRegDTO dto)
     {
         var admin = mapper.Map<Admin>(dto);
-        // store plain password for now
         admin.PasswordHash = dto.Password;
         admin.CreatedAt = DateTime.Now;
 

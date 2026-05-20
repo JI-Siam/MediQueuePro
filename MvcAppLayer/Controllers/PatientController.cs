@@ -42,7 +42,7 @@ public class PatientController : Controller
             ViewBag.Error = "Email already exists.";
             return View(dto);
         }
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction("Login");
     }
 
     [NotLogged]
@@ -73,7 +73,7 @@ public class PatientController : Controller
         HttpContext.Session.SetInt32("UType", 2);
         HttpContext.Session.SetInt32("UID", patient.PatientId);
 
-        return RedirectToAction(nameof(Dashboard));
+        return RedirectToAction("Dashboard");
     }
 
     [PatientAccess]
@@ -102,7 +102,7 @@ public class PatientController : Controller
     public IActionResult Edit()
     {
         var patientId = HttpContext.Session.GetInt32("UID");
-        if (patientId == null) return RedirectToAction(nameof(Login));
+        if (patientId == null) return RedirectToAction("Login");
 
         var model = srvc.GetEditModel(patientId.Value);
         if (model == null) return NotFound();
@@ -117,7 +117,7 @@ public class PatientController : Controller
     public IActionResult Edit(PatientRegDTO formObj)
     {
         var patientId = HttpContext.Session.GetInt32("UID");
-        if (patientId == null) return RedirectToAction(nameof(Login));
+        if (patientId == null) return RedirectToAction("Login");
 
         if (!ModelState.IsValid)
         {
@@ -135,7 +135,7 @@ public class PatientController : Controller
 
         HttpContext.Session.SetString("Uname", updated.FullName);
         TempData["Message"] = "Profile updated successfully.";
-        return RedirectToAction(nameof(Dashboard));
+        return RedirectToAction("Dashboard");
     }
 
     [PatientAccess]
@@ -217,7 +217,7 @@ public class PatientController : Controller
         }
 
         TempData["AppointmentToken"] = appointment.QueueToken;
-        return RedirectToAction(nameof(Queue), new { id = appointment.AppointmentId });
+        return RedirectToAction("Queue", new { id = appointment.AppointmentId });
     }
 
     [PatientAccess]
@@ -226,7 +226,7 @@ public class PatientController : Controller
         var patientId = HttpContext.Session.GetInt32("UID");
         if (patientId == null)
         {
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         return View(appointmentService.GetByPatientId(patientId.Value));
@@ -238,7 +238,7 @@ public class PatientController : Controller
         var patientId = HttpContext.Session.GetInt32("UID");
         if (patientId == null)
         {
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         var doctors = doctorService.GetAll();
@@ -264,7 +264,7 @@ public class PatientController : Controller
         var patientId = HttpContext.Session.GetInt32("UID");
         if (patientId == null)
         {
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction("Login");
         }
 
         var appointment = appointmentService.GetById(id);
@@ -298,6 +298,6 @@ public class PatientController : Controller
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction("Login");
     }
 }

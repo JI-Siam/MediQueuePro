@@ -3,16 +3,11 @@ using DAL.EF.Tables;
 
 public class PatientRepo
 {
-    private readonly MediQueueProDbContext db;
+    MediQueueProDbContext db;
 
     public PatientRepo(MediQueueProDbContext db)
     {
         this.db = db;
-    }
-
-    public Patient? GetByEmail(string email)
-    {
-        return db.Patients.FirstOrDefault(patient => patient.Email == email);
     }
 
     public Patient Add(Patient patient)
@@ -20,6 +15,11 @@ public class PatientRepo
         db.Patients.Add(patient);
         db.SaveChanges();
         return patient;
+    }
+
+    public Patient? GetByEmail(string email)
+    {
+        return db.Patients.FirstOrDefault(patient => patient.Email == email);
     }
 
     public List<Patient> GetAll()
@@ -34,6 +34,12 @@ public class PatientRepo
         return db.Patients.FirstOrDefault(p => p.PatientId == id);
     }
 
+    public List<Doctor> GetAllDoctor()
+    {
+        return db.Doctors
+            .OrderBy(doctor => doctor.FullName)
+            .ToList();
+    }
     public Patient Update(Patient patient)
     {
         db.Patients.Update(patient);
@@ -50,10 +56,5 @@ public class PatientRepo
         return true;
     }
 
-    public List<Doctor> GetAllDoctor()
-    {
-        return db.Doctors
-            .OrderBy(doctor => doctor.FullName)
-            .ToList();
-    }
+
 }

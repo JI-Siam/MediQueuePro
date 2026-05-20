@@ -4,12 +4,26 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppointMentRepo
 {
-    private readonly MediQueueProDbContext db;
+    MediQueueProDbContext db;
 
     public AppointMentRepo(MediQueueProDbContext db)
     {
         this.db = db;
     }
+
+    public Appointment Add(Appointment appointment)
+    {
+        appointment.CreatedAt ??= DateTime.Now;
+        appointment.Status = string.IsNullOrWhiteSpace(appointment.Status) ? "Pending" : appointment.Status;
+        appointment.IsEmergency ??= false;
+        appointment.IsVisited ??= false;
+
+        db.Appointments.Add(appointment);
+        db.SaveChanges();
+
+        return appointment;
+    }
+
 
     public List<Appointment> GetAll()
     {
@@ -103,38 +117,24 @@ public class AppointMentRepo
             a.AppointmentDate == appointmentDate);
     }
 
-    public Appointment Add(Appointment appointment)
-    {
-        appointment.CreatedAt ??= DateTime.Now;
-        appointment.Status = string.IsNullOrWhiteSpace(appointment.Status) ? "Pending" : appointment.Status;
-        appointment.IsEmergency ??= false;
-        appointment.IsVisited ??= false;
-
-        db.Appointments.Add(appointment);
-        db.SaveChanges();
-
-        return appointment;
-    }
-
     public Appointment? UpdateStatus(int appointmentId, string status)
     {
         var appt = db.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
         if (appt == null) return null;
 
-        // set status and visited/visit time when completed
+
         appt.Status = status;
-        if (string.Equals(status, "Completed", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(status, "Completed"))
         {
             appt.IsVisited = true;
             appt.VisitTime = DateTime.UtcNow;
 
-            // move to end of queue by assigning next token for that doctor/date
+
             var next = GetNextQueueToken(appt.DoctorId, appt.AppointmentDate);
             appt.QueueToken = next;
         }
-        else if (string.Equals(status, "Waiting", StringComparison.OrdinalIgnoreCase))
+        else if (string.Equals(status, "Waiting"))
         {
-            // Keep token but mark as waiting
             appt.IsVisited = false;
         }
 

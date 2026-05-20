@@ -4,11 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 public class DoctorRepo
 {
-    private readonly MediQueueProDbContext db;
+    MediQueueProDbContext db;
 
     public DoctorRepo(MediQueueProDbContext db)
     {
         this.db = db;
+    }
+
+    public Doctor Add(Doctor doctor)
+    {
+        db.Doctors.Add(doctor);
+        db.SaveChanges();
+        return doctor;
     }
 
     public Doctor? GetByEmail(string email)
@@ -52,12 +59,6 @@ public class DoctorRepo
             .FirstOrDefault(doctor => doctor.DoctorId == doctorId);
     }
 
-    public Doctor Add(Doctor doctor)
-    {
-        db.Doctors.Add(doctor);
-        db.SaveChanges();
-        return doctor;
-    }
 
     public Doctor Update(Doctor doctor)
     {

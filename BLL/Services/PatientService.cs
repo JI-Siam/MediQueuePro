@@ -5,12 +5,13 @@ using DAL.EF.Tables;
 
 public class PatientService
 {
-    private readonly PatientRepo repo;
-    private static readonly IMapper mapper = MapperConfig.GetMapper();
+    PatientRepo repo;
+    Mapper mapper;
 
     public PatientService(PatientRepo repo)
     {
         this.repo = repo;
+        mapper = MapperConfig.GetMapper();
     }
 
     public PatientDTO? Register(PatientRegDTO dto)
@@ -37,16 +38,14 @@ public class PatientService
             return null;
         }
 
-        // plain-text comparison (temporary, per request)
         if (!string.Equals(patient.PasswordHash, dto.Password, StringComparison.Ordinal))
         {
             return null;
         }
-
         return mapper.Map<PatientDTO>(patient);
     }
 
-    // CRUD: Patient management
+
     public List<PatientDTO> GetAll()
     {
         return mapper.Map<List<PatientDTO>>(repo.GetAll());
@@ -63,7 +62,7 @@ public class PatientService
         var existing = repo.GetById(id);
         if (existing == null) return null;
 
-        // update allowed fields
+
         existing.FullName = dto.FullName;
         existing.Phone = dto.Phone;
         existing.Age = dto.Age;
@@ -100,7 +99,7 @@ public class PatientService
 
         existing.FullName = dto.FullName;
         existing.Email = dto.Email;
-        existing.PasswordHash = dto.Password; // plain-text for now per project state
+        existing.PasswordHash = dto.Password;
         existing.Phone = dto.Phone;
         existing.Age = dto.Age;
         existing.Gender = dto.Gender;

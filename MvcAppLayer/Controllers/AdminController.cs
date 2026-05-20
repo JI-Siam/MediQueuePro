@@ -82,7 +82,6 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // Patients CRUD
     [AdminAccess]
     public IActionResult Patients()
     {
